@@ -15,11 +15,6 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
-    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.3.15/angular.min.js"></script>
 </head>
 <style>
     .com {
@@ -55,10 +50,10 @@
         </div>
         <div class="navbar-collapse collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li class="hidden-sm hidden-md"><a href="/tab/tab1">Tab1</a></li>
-                <li><a href="/tab/tab2" target="_blank">Tab2</a></li>
-                <li><a href="/tab/tab3" target="_blank">Tab3</a></li>
-                <li><a href="/tab/tab4" target="_blank">Tab4</a></li>
+                <li class="hidden-sm hidden-md"><a href="/tab1">Tab1</a></li>
+                <li><a href="/tab2" target="_blank">Tab2</a></li>
+                <li><a href="/tab3" target="_blank">Tab3</a></li>
+                <li><a href="/tab4" target="_blank">Tab4</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right hidden-sm">
                 <li>
@@ -95,7 +90,7 @@
     </div>
 </div>
 
-<!-- 登陆 -->
+<!-- 登陆 暂时没用-->
 <div class="modal fade" id="singInModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -119,18 +114,22 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" >关闭</button>
                 <button type="button" class="btn btn-primary" id="submit">确认</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Javascript -->
+<script src="assets/js/jquery-1.11.1.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
 <script>
     $("#submitSignOut").click(function () {
         $.post("./signOut", {}, function (res) {
             if (res) {
-                location.href = "index.jsp";
+                location.href = "login.html";
             } else {
                 alert("退出登陆失败");
             }

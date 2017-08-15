@@ -35,7 +35,7 @@ public class SeckillDaoTest {
     public void testQueryAll() throws Exception {
         //Parameter 'offset' not found. Available parameters are [0, 1, param1, param2]
         // java没有保存形参的记录:queryAll(int offet,int limit) ->queryAll(arg0,arg1)
-        List<Seckill> seckills = seckillDao.queryAll(0, 100);
+        List<Seckill> seckills = seckillDao.queryAll(null, "desc", 100, 0);
         for (Seckill seckill : seckills) {
             System.out.println(seckill);
         }

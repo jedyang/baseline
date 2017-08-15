@@ -22,7 +22,7 @@ import java.util.List;
  * @author yunsheng
  */
 @Controller//@Service @Component
-@RequestMapping("/tab")
+@RequestMapping("/")
 public class IndexController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

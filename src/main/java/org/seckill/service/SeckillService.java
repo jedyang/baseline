@@ -18,10 +18,9 @@ import java.util.List;
 public interface SeckillService {
 
     /**
-     * 查询所有秒杀记录
-     * @return
+     * 查询全部数量
      */
-    List<Seckill> getSeckillList();
+    int countAll();
 
     /**
      * 查询单个秒杀记录
@@ -56,4 +55,12 @@ public interface SeckillService {
      */
     SeckillExecution executeSeckillProcedure(long seckillId, long userPhone, String md5);
 
+    /**
+     * 分页查询
+     * @param limitInt
+     * @param offsetInt
+     * @param sort
+     *@param order @return
+     */
+    List<Seckill> getSeckillListPage(int limitInt, int offsetInt, String sort, String order);
 }

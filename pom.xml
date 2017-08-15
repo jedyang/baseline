@@ -153,7 +153,12 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.31</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>seckill</finalName>

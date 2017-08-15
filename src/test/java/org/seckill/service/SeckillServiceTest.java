@@ -15,8 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
         "classpath:spring/spring-dao.xml",
@@ -29,7 +27,7 @@ public class SeckillServiceTest {
 
     @Test
     public void testGetSeckillList() throws Exception {
-        List<Seckill> list = seckillService.getSeckillList();
+        List<Seckill> list = seckillService.getSeckillListPage(4, 0, null, null);
         logger.info("list={}", list);
     }
 

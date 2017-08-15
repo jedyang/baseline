@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -45,9 +44,9 @@ public class SeckillServiceImpl implements SeckillService {
     private final String salt = "sadkfjalsdjfalksj23423^&*^&%&!EBJKH#e™£4";
 
     @Override
-    public List<Seckill> getSeckillList() {
-        return mockGetSeckillList();
-//        return seckillDao.queryAll(0, 4);
+    public int countAll() {
+//        return mockGetSeckillList();
+        return seckillDao.countAll();
     }
 
     private List<Seckill> mockGetSeckillList() {
@@ -67,19 +66,25 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public Exposer exportSeckillUrl(long seckillId) {
         // 优化点:缓存优化:超时的基础上维护一致性
-        //1：访问redis
-        Seckill seckill = redisDao.getSeckill(seckillId);
-        if (seckill == null) {
-            //2:访问数据库
-            seckill = seckillDao.queryById(seckillId);
-            if (seckill == null) {
-                return new Exposer(false, seckillId);
-            } else {
-                //3:放入redis
-                redisDao.putSeckill(seckill);
-            }
-        }
+        //1：访问redis 暂时不用
+        /**
+         Seckill seckill = redisDao.getSeckill(seckillId);
 
+         if (seckill == null) {
+         //2:访问数据库
+         seckill = seckillDao.queryById(seckillId);
+         if (seckill == null) {
+         return new Exposer(false, seckillId);
+         } else {
+         //3:放入redis
+         redisDao.putSeckill(seckill);
+         }
+         }
+         **/
+        Seckill seckill = seckillDao.queryById(seckillId);
+        if (seckill == null) {
+            return new Exposer(false, seckillId);
+        }
         Date startTime = seckill.getStartTime();
         Date endTime = seckill.getEndTime();
         //系统当前时间
@@ -175,5 +180,10 @@ public class SeckillServiceImpl implements SeckillService {
 
         }
 
+    }
+
+    @Override
+    public List<Seckill> getSeckillListPage(int limitInt, int offsetInt, String sort, String order) {
+        return seckillDao.queryAll(sort, order, limitInt, offsetInt);
     }
 }
