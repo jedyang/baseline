@@ -19,7 +19,7 @@ public class LoginController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "signIn", method = RequestMethod.POST)
+    @RequestMapping(value = "doLogin", method = RequestMethod.POST)
     @ResponseBody
     public boolean signIn(HttpServletRequest request, HttpServletResponse response) {
         String nameString = request.getParameter("username");
