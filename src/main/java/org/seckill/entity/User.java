@@ -4,8 +4,8 @@ public class User {
     private int id;
     private String name;
     private String password;
-    private String defaultAddress;
-    private String defaultPhone;
+    private String address;
+    private String phone;
     private String mail;
     private String regTime;
     private String money;
@@ -51,20 +51,20 @@ public class User {
         this.password = password;
     }
 
-    public String getDefaultAddress() {
-        return defaultAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDefaultAddress(String defaultAddress) {
-        this.defaultAddress = defaultAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getDefaultPhone() {
-        return defaultPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setDefaultPhone(String defaultPhone) {
-        this.defaultPhone = defaultPhone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getMail() {

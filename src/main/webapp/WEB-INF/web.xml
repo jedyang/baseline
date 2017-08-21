@@ -26,6 +26,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>/login_new.html</welcome-file>
+        <welcome-file>/signup.html</welcome-file>
     </welcome-file-list>
 </web-app>

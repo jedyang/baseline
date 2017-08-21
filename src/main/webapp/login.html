@@ -35,7 +35,6 @@
 </head>
 
 <body class="login-img3-body">
-
 <div class="container">
 
     <form class="login-form">
@@ -52,11 +51,11 @@
                 <input id="password" type="password" class="form-control" placeholder="Password">
             </div>
             <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
+                <input type="checkbox" value="remember-me" id="remember"> Remember me
                 <span class="pull-right"> <a href="#"> Forgot Password?</a></span>
             </label>
-            <button class="btn btn-primary btn-lg btn-block" id="login" type="submit">Login</button>
-            <button class="btn btn-info btn-lg btn-block" id="signup" href="signup.html">Signup</button>
+            <button class="btn btn-primary btn-lg btn-block" id="login" type="button">登陆</button>
+            <a class="btn btn-info btn-lg btn-block" id="signup" href="signup.html">注册</a>
         </div>
     </form>
 
@@ -64,6 +63,7 @@
 
 <!-- Javascript -->
 <script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <!-- bootstrap -->
 <script src="js/bootstrap.min.js"></script>
 
@@ -71,33 +71,57 @@
     // 进入页面直接定位到输入
     $("#user").focus();
 
-    $("#login").click(function () {
+    function checkEmpty(obj) {
+        $(obj).css("border", "1px solid #f00");
+        $(obj).focus();
+    }
+
+    // 如果cookie存在
+    if ($.cookie('bit') === 'true') {
+        $('#remember').attr('checked', 'checked');
+        $('#user').val($.cookie('username'));
+        $('#password').val($.cookie('password'));
+    }
+
+    $('#login').on('click', function () {
         // 先校验参数必填
         var user = $("#user").val();
         var pwd = $("#password").val();
         if (user && pwd) {
             $.post("./doLogin", {username: user, password: pwd}, function (res) {
                 if (res) {
+                    if ($('#remember').is(':checked')) {
+                        $.cookie('username', user, {
+                            expires: 365
+                        });
+                        $.cookie('password', pwd, {
+                            expires: 365
+                        });
+                        $.cookie('bit', 'true', {
+                            expires: 365
+                        });
+
+                    } else {
+                        $.removeCookie('username');
+                        $.removeCookie('password');
+                        $.removeCookie('bit');
+                    }
                     location.href = "index_new.html";
                 } else {
                     alert("用户名或密码错误");
                 }
-                ;
+
             });
-        } else if (!user){
+        } else if (!user) {
             checkEmpty($("#user"));
 
-        }else {
+        } else {
             // 把user的错误提示关掉
             $("#user").css("border", "none");
             checkEmpty($("#password"));
         }
     });
 
-    function checkEmpty(obj) {
-        obj.css("border", "1px solid #f00");
-        obj.focus();
-    }
 </script>
 </body>
 </html>

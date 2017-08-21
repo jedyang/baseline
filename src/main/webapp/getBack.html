@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>注册</title>
+    <title>找回密码</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -21,17 +21,6 @@
     <![endif]-->
 </head>
 <style>
-    .divForm {
-        position: absolute; /*绝对定位*/
-        width: 300px;
-        height: 200px;
-        text-align: center; /*(让div中的内容居中)*/
-        top: 50%;
-        left: 40%; /*40是因为bootstrap有margin-left*/
-        margin-top: -200px;
-        margin-left: -150px;
-    }
-
     /* 公共样式 S */
     body {
         margin: 20px 20px 20px 20px
@@ -123,7 +112,7 @@
         <label for="user" class="control-label">用户名</label>
         <div class="controls">
             <input id="user" type="text" placeholder="用户名" onblur="blurUserFunc(this)">
-            <span class="help-inline" id="userErr" style="display: none">用户名已存在</span>
+            <span class="help-inline" id="userErr" style="display: none">用户不存在</span>
         </div>
     </div>
 
@@ -131,26 +120,17 @@
         <label for="email" class="control-label">邮箱</label>
         <div class="controls">
             <input id="email" type="email" placeholder="邮箱" onblur="blurEmailFunc(this)">
-            <span class="help-inline" id="emailErr" style="display: none">该邮箱已被注册</span>
+            <span class="help-inline" id="emailErr" style="display: none">该邮箱未注册</span>
         </div>
     </div>
-    <div class="control-group" id="passwordiv">
-        <label for="password" class="control-label">密码</label>
+
+    <div class="control-group">
         <div class="controls">
-            <input id="password" type="password" placeholder="密码" onblur="blurFunc(this)">
-        </div>
-    </div>
-    <div class="control-group" id="passwordiv2">
-        <label for="password2" class="control-label">确认密码</label>
-        <div class="controls">
-            <input id="password2" type="password" placeholder="密码确认" onblur="blurPwdFunc(this)">
-            <span class="help-inline" id="pwdErr" style="display: none">密码不一致</span>
+            <button id="submit" type="button" class="btn btn-primary">找回密码</button>
         </div>
     </div>
     <div class="control-group">
-        <div class="controls">
-            <button id="submit" type="button" class="btn btn-primary">提交</button>
-        </div>
+        <p id="resultMsg" style="padding-left: 180px">找回成功后，密码会发送到注册邮箱</p>
     </div>
 </form>
 
@@ -162,29 +142,35 @@
         // 先校验参数必填
         var user = $("#user").val();
         var email = $("#email").val();
-        var pwd = $("#password").val();
-        var pwd2 = $("#password2").val();
-        if (user & email & pwd & pwd2){
-            $.post("./doSignup", {username: user, password: pwd, email: email}, function (res) {
+
+        if (user & email) {
+            $.post("./doGetBack", {username: user, email: email}, function (res) {
                 if (res) {
-                    location.href = "index_new.html";
+                    var result = res.result;
+                    switch (result) {
+                        case '0':
+                            $("#resultMsg").text("密码已发送到注册邮箱");
+                            break;
+                        case '1':
+                            $("#resultMsg").text("用户名和邮箱不匹配");
+                            break;
+                        case '2':
+                            $("#resultMsg").text("用户不存在");
+                            break;
+                        default:
+                            $("#resultMsg").text("找回失败");
+                    }
                 } else {
-                    alert("todo err");
+                    $("#resultMsg").text("服务异常");
                 }
                 ;
             });
-        }else {
+        } else {
             if (!user) {
                 $("#user").css("border", "1px solid #f00");
             }
             if (!email) {
                 $("#email").css("border", "1px solid #f00");
-            }
-            if (!pwd) {
-                $("#password").css("border", "1px solid #f00");
-            }
-            if (!pwd2) {
-                $("#password2").css("border", "1px solid #f00");
             }
         }
     });
@@ -202,11 +188,12 @@
     }
 
     /* 是否已经存在校验*/
+    /* 和注册时相反，不存在报错 */
     function blurUserFunc(obj) {
         if (blurFunc(obj)) {
             var user = $("#user").val();
             $.post("./doCheckUser", {param: user, column: "name"}, function (res) {
-                if (res) {
+                if (!res) {
                     // 将错误过一次的情况恢复正常
                     $("#userErr").hide();
                     $("#userDiv").removeClass("error");
@@ -226,10 +213,10 @@
         if (blurFunc(obj)) {
             var email = $("#email").val();
             $.post("./doCheckUser", {param: email, column: "email"}, function (res) {
-                if (res) {
+                if (!res) {
                     $("#emailErr").hide();
                     $("#emailDiv").removeClass("error");
-                }else{
+                } else {
                     // 该邮箱已经注册
 //                    obj.css("border", "1px solid #f00");
                     $(obj).focus();
@@ -250,7 +237,7 @@
                 $("#pwdErr").show();
                 $("#passwordiv").addClass("error");
                 $("#passwordiv2").addClass("error");
-            }else{
+            } else {
                 $("#pwdErr").hide();
                 $("#passwordiv").removeClass("error");
                 $("#passwordiv2").removeClass("error");

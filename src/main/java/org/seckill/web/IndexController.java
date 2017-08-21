@@ -45,4 +45,14 @@ public class IndexController {
     public String tab4(Model model) {
         return "tab4";
     }
+
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index(Model model) {
+
+
+
+        return "tab4";
+    }
+
+
 }
