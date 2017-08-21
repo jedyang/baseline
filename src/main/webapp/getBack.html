@@ -143,7 +143,7 @@
         var user = $("#user").val();
         var email = $("#email").val();
 
-        if (user & email) {
+        if (user && email) {
             $.post("./doGetBack", {username: user, email: email}, function (res) {
                 if (res) {
                     var result = res.result;
