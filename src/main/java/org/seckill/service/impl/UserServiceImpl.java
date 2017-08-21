@@ -46,9 +46,20 @@ public class UserServiceImpl implements UserService {
         return user.getPassword();
     }
 
+
     @Override
-    public String getId(String username) {
-        return null;
+    public Result<User> getById(String userId) {
+        User user = userDao.getRecord("'" + userId + "'", "user_id");
+        Result r = new Result();
+
+        if (null == user){
+            r.setSuccess(false);
+            r.setMsg("没有找到对应的信息");
+        }else{
+            r.setSuccess(true);
+            r.setResultObj(user);
+        }
+        return r;
     }
 
     @Override
@@ -69,5 +80,12 @@ public class UserServiceImpl implements UserService {
             r.setResultObj(user);
         }
         return r;
+    }
+
+
+    @Override
+    public int updateUser(User resultObj) {
+        int result = userDao.updateUserPwd(resultObj);
+        return result;
     }
 }

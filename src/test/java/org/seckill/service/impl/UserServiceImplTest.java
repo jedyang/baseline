@@ -1,27 +1,21 @@
-package org.seckill.service;
+package org.seckill.service.impl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seckill.dto.Exposer;
-import org.seckill.dto.SeckillExecution;
-import org.seckill.entity.Seckill;
-import org.seckill.exception.RepeatKillException;
-import org.seckill.exception.SeckillCloseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.seckill.entity.Result;
+import org.seckill.entity.User;
+import org.seckill.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
         "classpath:spring/spring-dao.xml",
         "classpath:spring/spring-service.xml"})
-public class UserServiceTest {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+public class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
@@ -29,6 +23,15 @@ public class UserServiceTest {
     public void testCountRecord(){
         System.out.println(userService.countRecord("123", "name"));
         System.out.println(userService.countRecord("helloyunsheng@126.com", "email"));
+    }
+    @Test
+    public void updateUser() throws Exception {
+        User user = new User();
+        user.setId(1008);
+        user.setPassword("1008");
+        userService.updateUser(user);
+        Result<User> byId = userService.getById("1008");
+        System.out.println(byId.getResultObj());
     }
 
 }

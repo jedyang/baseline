@@ -13,4 +13,6 @@ public interface UserDao {
 
 
     User getRecord(@Param("param") String param, @Param("column") String column);
+
+    int updateUserPwd(@Param("user") User user);
 }

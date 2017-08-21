@@ -43,7 +43,6 @@ public class LoginController {
             //把这些东西都加到session中去;
             //在session的数据， 在界面中也可以直接通过${}获取到;
             session.setAttribute("name", nameString);
-            session.setAttribute("id", userService.getId(nameString));
             if (1 == userService.getRole(nameString)) {
                 session.setAttribute("role", 1);
             } else {
@@ -127,6 +126,33 @@ public class LoginController {
                     logger.error("doGetBack error", e);
                 }
 
+            } else {
+                m.put("result", "1");
+            }
+
+        } else {
+            m.put("result", "2");
+        }
+        return m;
+    }
+
+    @RequestMapping(value = "doReset", method = RequestMethod.POST)
+    @ResponseBody
+    public Map doReset(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> m = new HashMap<String, String>();
+
+        String user = request.getParameter("username");
+        String email = request.getParameter("email");
+        String newPassword = request.getParameter("newPassword");
+        String oldPassword = request.getParameter("oldPassword");
+
+        Result<User> result = userService.getUser(user);
+        if (result.isSuccess()) {
+            User resultObj = result.getResultObj();
+            if (email.equals(resultObj.getMail()) && oldPassword.equals(resultObj.getPassword())) {
+                resultObj.setPassword(newPassword);
+                userService.updateUser(resultObj);
+                m.put("result", "0");
             } else {
                 m.put("result", "1");
             }

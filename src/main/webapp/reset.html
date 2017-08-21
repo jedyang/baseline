@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!--suppress JSUnresolvedFunction -->
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>密码重置</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    /* 公共样式 S */
+    body {
+        margin: 20px 20px 20px 20px
+    }
+
+    h1, h2, h3, .masthead p, .subhead p, .marketing h2, .lead {
+        font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei UI", "Microsoft YaHei", SimHei, "宋体", simsun, sans-serif;
+        font-weight: normal;
+    }
+
+    /* 公共样式 E */
+    /* 用于栅格系统示例的样式 S */
+    .show-grid [class*="span"] {
+        background-color: #EEEEEE;
+        border-radius: 3px 3px 3px 3px;
+        line-height: 40px;
+        min-height: 40px;
+        text-align: center;
+    }
+
+    .show-grid {
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .show-grid [class*="span"]:hover {
+        background-color: #DDDDDD;
+    }
+
+    .show-grid [class*="span"] [class*="span"] {
+        background-color: #CCCCCC;
+    }
+
+    .show-grid .show-grid [class*="span"] {
+        margin-top: 5px;
+    }
+
+    .show-grid [class*="span"] [class*="span"] [class*="span"] {
+        background-color: #999999;
+    }
+
+    /* 用于栅格系统示例的样式 E */
+    /* 用于表达的样式 S */
+    .bs-docs-example:after {
+        background-color: #F5F5F5;
+        border: 1px solid #DDDDDD;
+        border-radius: 4px 0 4px 0;
+        color: #9DA0A4;
+        /*content: "示例：";*/
+        font-size: 12px;
+        font-weight: bold;
+        left: -1px;
+        padding: 3px 7px;
+        position: absolute;
+        top: -1px;
+    }
+
+    form.bs-docs-example {
+        padding-bottom: 19px;
+    }
+
+    .bs-docs-example {
+        background-color: #FFFFFF;
+        border: 1px solid #DDDDDD;
+        border-radius: 4px 4px 4px 4px;
+        margin: 15px 0;
+        padding: 39px 200px;
+        position: relative;
+    }
+
+    .bs-docs-example-submenus .dropup > .dropdown-menu, .bs-docs-example-submenus .dropdown > .dropdown-menu {
+        display: block;
+        margin-bottom: 5px;
+        position: static;
+    }
+
+    .bs-docs-example-submenus {
+        min-height: 180px;
+    }
+
+    /* 用于表达的样式 E */
+
+</style>
+
+<body>
+
+<form class="bs-docs-example form-horizontal">
+    <div class="control-group" id="userDiv">
+        <label for="user" class="control-label">用户名</label>
+        <div class="controls">
+            <input id="user" type="text" placeholder="用户名" onblur="blurUserFunc(this)">
+            <span class="help-inline" id="userErr" style="display: none">用户不存在</span>
+        </div>
+    </div>
+
+    <div class="control-group" id="emailDiv">
+        <label for="email" class="control-label">邮箱</label>
+        <div class="controls">
+            <input id="email" type="email" placeholder="邮箱" onblur="blurEmailFunc(this)">
+            <span class="help-inline" id="emailErr" style="display: none">该邮箱未注册</span>
+        </div>
+    </div>
+    <div class="control-group" id="passworOlddiv">
+        <label for="password" class="control-label">旧密码</label>
+        <div class="controls">
+            <input id="passwordOld" type="password" placeholder="旧密码" onblur="blurFunc(this)">
+        </div>
+    </div>
+    <div class="control-group" id="passwordiv">
+        <label for="password" class="control-label">新密码</label>
+        <div class="controls">
+            <input id="password" type="password" placeholder="密码" onblur="blurNewOldFunc(this)">
+            <span class="help-inline" id="oldNewPwdErr" style="display: none">新旧密码不能一样</span>
+        </div>
+    </div>
+    <div class="control-group" id="passwordiv2">
+        <label for="password2" class="control-label">确认密码</label>
+        <div class="controls">
+            <input id="password2" type="password" placeholder="密码确认" onblur="blurPwdFunc(this)">
+            <span class="help-inline" id="pwdErr" style="display: none">密码不一致</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button id="submit" type="button" class="btn btn-primary">提交</button>
+        </div>
+        <div>
+            <p id="resultMsg" style="padding-left: 180px"></p>
+        </div>
+    </div>
+</form>
+
+
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    $("#submit").click(function () {
+        // 先校验参数必填
+        var user = $("#user").val();
+        var email = $("#email").val();
+        var pwdOld = $("#passwordOld").val();
+        var pwd = $("#password").val();
+        var pwd2 = $("#password2").val();
+
+        if (user && email && pwd && pwd2 && pwdOld) {
+            // 提交前再校验一次，防止跳跃操作
+            if (pwd != pwd2) {
+                $("#pwdErr").show();
+                $("#passwordiv").addClass("error");
+                $("#passwordiv2").addClass("error");
+            } else {
+                $.post("./doReset", {
+                    username: user,
+                    newPassword: pwd,
+                    email: email,
+                    oldPassword: pwdOld
+                }, function (res) {
+                    if (res) {
+                        var result = res.result;
+                        switch (result) {
+                            case '0':
+                                $("#resultMsg").text("密码重置成功");
+                                $("#resultMsg").css("color", "green");
+                                break;
+                            case '1':
+                                $("#resultMsg").text("信息有误，重置失败");
+                                $("#resultMsg").css("color", "red");
+
+                                break;
+                            case '2':
+                                $("#resultMsg").text("用户不存在");
+                                $("#resultMsg").css("color", "red");
+                                break;
+                            default:
+                                $("#resultMsg").text("重置失败");
+                                $("#resultMsg").css("color", "red");
+                        }
+                    } else {
+                        $("#resultMsg").text("服务异常");
+                    }
+                    ;
+                });
+            }
+        } else {
+            if (!user) {
+                $("#user").css("border", "1px solid #f00");
+            }
+            if (!email) {
+                $("#email").css("border", "1px solid #f00");
+            }
+            if (!pwd) {
+                $("#password").css("border", "1px solid #f00");
+            }
+            if (!pwd2) {
+                $("#password2").css("border", "1px solid #f00");
+            }
+            if (!pwdOld) {
+                $("#passwordOld").css("border", "1px solid #f00");
+            }
+        }
+    });
+
+    /* 判空，变红*/
+    function blurFunc(obj) {
+        var value = $(obj).val();
+        if (!value) {
+            // 为空变红
+            $(obj).css("border", "1px solid #f00");
+            return false;
+        }
+        $(obj).css("border", "none");
+        return true;
+    }
+
+    /* 是否已经存在校验*/
+    function blurUserFunc(obj) {
+        if (blurFunc(obj)) {
+            var user = $("#user").val();
+            $.post("./doCheckUser", {param: user, column: "name"}, function (res) {
+                if (!res) {
+                    // 将错误过一次的情况恢复正常
+                    $("#userErr").hide();
+                    $("#userDiv").removeClass("error");
+                } else {
+                    // 该用户名已经存在
+//                    $(obj).css("border", "1px solid #f00");
+                    $(obj).focus();
+                    $("#userErr").show();
+                    $("#userDiv").addClass("error");
+                }
+            });
+        }
+    }
+
+    /* 是否已经存在校验*/
+    function blurEmailFunc(obj) {
+        if (blurFunc(obj)) {
+            var email = $("#email").val();
+            $.post("./doCheckUser", {param: email, column: "email"}, function (res) {
+                if (!res) {
+                    $("#emailErr").hide();
+                    $("#emailDiv").removeClass("error");
+                } else {
+                    // 该邮箱已经注册
+//                    obj.css("border", "1px solid #f00");
+                    $(obj).focus();
+                    $("#emailErr").show();
+                    $("#emailDiv").addClass("error");
+                }
+            });
+        }
+    }
+
+    /* 两次密码校验*/
+    function blurPwdFunc(obj) {
+        if (blurFunc(obj)) {
+            var pwd1 = $("#password").val();
+            var pwd2 = $(obj).val();
+            if (pwd1 != pwd2) {
+                $(obj).focus();
+                $("#pwdErr").show();
+                $("#passwordiv").addClass("error");
+                $("#passwordiv2").addClass("error");
+            } else {
+                $("#pwdErr").hide();
+                $("#passwordiv").removeClass("error");
+                $("#passwordiv2").removeClass("error");
+            }
+        }
+    }
+
+    /* 新旧密码校验*/
+    function blurNewOldFunc(obj) {
+        if (blurFunc(obj)) {
+            var pwd1 = $("#passwordOld").val();
+            var pwd2 = $(obj).val();
+            if (pwd1 == pwd2) {
+                $(obj).focus();
+                $("#oldNewPwdErr").show();
+                $("#passwordiv").addClass("error");
+            } else {
+                $("#oldNewPwdErr").hide();
+                $("#passwordiv").removeClass("error");
+            }
+        }
+    }
+</script>
+</body>
+</html>

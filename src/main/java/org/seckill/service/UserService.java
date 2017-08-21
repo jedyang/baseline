@@ -19,9 +19,11 @@ public interface UserService {
 
     String getPassword(String username);
 
-    String getId(String username);
+    Result<User> getById(String userId);
 
     int getRole(String username);
 
     Result<User> getUser(String userName);
+
+    int updateUser(User resultObj);
 }

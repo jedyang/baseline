@@ -82,4 +82,20 @@ public class User {
     public void setRegTime(String regTime) {
         this.regTime = regTime;
     }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", mail='" + mail + '\'' +
+                ", regTime='" + regTime + '\'' +
+                ", money='" + money + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }
