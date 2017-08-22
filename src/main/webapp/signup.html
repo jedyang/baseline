@@ -167,7 +167,7 @@
         if (user & email & pwd & pwd2){
             $.post("./doSignup", {username: user, password: pwd, email: email}, function (res) {
                 if (res) {
-                    location.href = "index_new.html";
+                    location.href = "index_new.jsp";
                 } else {
                     alert("todo err");
                 }

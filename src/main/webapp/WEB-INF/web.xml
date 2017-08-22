@@ -26,6 +26,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>/signup.html</welcome-file>
+        <welcome-file>/index_new.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
