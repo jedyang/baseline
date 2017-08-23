@@ -277,7 +277,9 @@
                 <!-- alert notification end-->
 
                 <c:if test="${name==null}">
-                    登陆
+                    <div style="display: inline-block;padding: 15px 10px">
+                        <a href="login.html" style="font-size: large">登陆</a>|<a href="signup.html" style="font-size: large">注册</a>
+                    </div>
                 </c:if>
                 <c:if test="${name!=null}">
                     <!-- user login dropdown start-->
